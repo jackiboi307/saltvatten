@@ -1,0 +1,57 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "monospace";
+    font-size: 14px;
+}
+
+@bg: #101010;
+@fg: @white;
+@yellow: #cc2;
+@blue: #28c;
+@white: #ccc;
+@gap: 20px;
+
+body {
+    display: grid;
+    height: 100vh;
+    padding: @gap;
+    grid-gap: @gap;
+
+    background-color: @bg;
+
+    grid-template-rows: 1fr 20px;
+    grid-template-columns: 1fr minmax(0, 800px) 1fr;
+    grid-template-areas: ". messages ." ". prompt .";
+
+    #messages { grid-area: messages; }
+    #prompt   { grid-area: prompt; }
+}
+
+#messages {
+    max-height: 100%;
+    overflow: scroll;
+    scrollbar-width: none;
+    ::-webkit-scrollbar { display: none; }
+
+    .message {
+        .username  { color: @yellow; }
+        .separator { color: @blue; }
+        .content   { color: @white; }
+    }
+}
+
+#prompt input {
+    width: 100%;
+}
+
+input {
+    background-color: @bg;
+    color: @white;
+    padding: 4px;
+}
+
+*:focus {
+    outline: none;
+}
