@@ -7,8 +7,36 @@
     <script src="/modules/less" ></script>
     <script src="/modules/jsonpatch.js"></script>
     <script src="/script.js" type="module"></script>
+    <script>
+        function set_visible(ids) {
+            ["btn-channels", "btn-back", "channels", "messages", "prompt"].forEach(id => {
+                if (ids.includes(id)) {
+                    document.getElementById(id).style.display = "initial";
+                } else {
+                    document.getElementById(id).style.display = "none";
+                }
+            });
+        }
+
+        function back() {
+            if (btn_back.style.display == "initial") {
+                set_visible(["btn-channels", "messages", "prompt"]);
+            }
+        }
+
+        window.back = back;
+
+        window.init = () => {
+            btn_back = document.getElementById("btn-back");
+            btn_channels = document.getElementById("btn-channels");
+            btn_back.onclick = back;
+            btn_channels.onclick = () => {
+                set_visible(["btn-back", "channels"]);
+            };
+        };
+    </script>
 </head>
-<body>
+<body onload="init();">
     <div id="channels"></div>
     <div id="messages"></div>
     <div id="prompt">
@@ -16,5 +44,7 @@
             <input type="text">
         </form>
     </div>
+    <div id="btn-channels" class="mobile-btn">CHANNELS</div>
+    <div id="btn-back" class="mobile-btn">BACK</div>
 </body>
 </html>

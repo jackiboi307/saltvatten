@@ -9,7 +9,7 @@
 @bg: #101214;
 @fg: @white;
 @yellow: #cc2;
-@blue: #28c;
+@blue: #4ae;
 @white: #ccc;
 @gap: 20px;
 
@@ -31,6 +31,8 @@ body {
     #channels { grid-area: channels; }
     #messages { grid-area: messages; }
     #prompt   { grid-area: prompt; }
+
+    overflow: clip;
 }
 
 #messages {
@@ -40,6 +42,8 @@ body {
     ::-webkit-scrollbar { display: none; }
 
     .message {
+        word-break: break-word;
+
         .username  { color: @yellow; }
         .separator { color: @blue; }
         .content   { color: @white; }
@@ -66,4 +70,38 @@ input {
 
 *:focus {
     outline: none;
+}
+
+.mobile-btn {
+    display: none;
+    position: absolute;
+    top: @gap;
+    right: @gap;
+    color: @blue;
+    cursor: pointer;
+    padding: 10px;
+}
+
+@media only screen and (max-width: 800px) {
+    body {
+        grid-template-columns: 1fr;
+        grid-template-areas: initial;
+
+        #messages {
+            grid-area: 1/1/2/3;
+        }
+
+        #channels {
+            display: none;
+            grid-area: 1/1/3/3;
+        }
+
+        #prompt {
+            grid-area: 2/1/3/3;
+        }
+    }
+
+    #btn-channels {
+        display: initial;
+    }
 }
