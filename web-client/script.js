@@ -20,6 +20,9 @@ function render() {
     render_id("channels", "channels.html", {
         "channels": Object.keys(data["channels"])
     });
+
+    const messages = document.getElementById("messages");
+    messages.scrollTop = messages.scrollHeight;
 }
 
 window.send = () => {
