@@ -6,7 +6,7 @@
     font-size: 14px;
 }
 
-@bg: #101010;
+@bg: #101214;
 @fg: @white;
 @yellow: #cc2;
 @blue: #28c;
@@ -23,8 +23,12 @@ body {
 
     grid-template-rows: 1fr 20px;
     grid-template-columns: 1fr minmax(0, 800px) 1fr;
-    grid-template-areas: ". messages ." ". prompt .";
+    grid-template-areas:
+        "channels messages ."
+        "channels prompt ."
+    ;
 
+    #channels { grid-area: channels; }
     #messages { grid-area: messages; }
     #prompt   { grid-area: prompt; }
 }
@@ -39,6 +43,14 @@ body {
         .username  { color: @yellow; }
         .separator { color: @blue; }
         .content   { color: @white; }
+    }
+}
+
+#channels {
+    .channel {
+        cursor: pointer;
+        color: @yellow;
+        width: 100%;
     }
 }
 

@@ -6,20 +6,20 @@ var params = new URLSearchParams(document.location.search);
 const socket = io(params.get("address"));
 var data = {};
 
+nunjucks.configure('templates', { autoescape: true });
+
 function render() {
-    document.getElementById("messages").innerHTML = nunjucks.renderString(
-        `{% for message in messages %}
-        <p class="message">
-            <span class="username">{{ users[message.user_id].username }}</span>
-            <span class="separator">&gt;</span>
-            <span class="content">{{ message.content }}</span>
-        </p>
-        {% endfor %}`,
-        {
-            "messages": data["channels"][params.get("channel")]["messages"],
-            "users": data["users"]
-        }
-    );
+    function render_id(id, template, context) {
+        document.getElementById(id).innerHTML = nunjucks.render(template, context);
+    }
+
+    render_id("messages", "messages.html", {
+        "messages": data["channels"][params.get("channel")]["messages"],
+        "users": data["users"]
+    });
+    render_id("channels", "channels.html", {
+        "channels": Object.keys(data["channels"])
+    });
 }
 
 window.send = () => {
@@ -34,6 +34,12 @@ window.send = () => {
         return false;
     }
 };
+
+window.set_channel = (channel) => {
+    params.set("channel", channel);
+    window.history.pushState(null, "", "?" + params.toString());
+    render();
+}
 
 socket.on("data", (new_data) => {
     data = new_data;
