@@ -46,6 +46,9 @@ async function main() {
             const user_data = await response.json();
             const user_id = user_data["user_id"]
             connected_users[socket.id] = user_id;
+            if (!(user_id in data["users"])) {
+                data["users"][user_id] = {};
+            }
             data["users"][user_id]["username"] = user_data["username"];
             socket.emit("authorized", {});
         });
@@ -71,6 +74,7 @@ async function main() {
     });
 
     httpserver.listen(config["port"]);
+    console.log("server started");
 }
 
 main();
