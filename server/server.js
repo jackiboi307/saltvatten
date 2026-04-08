@@ -70,7 +70,7 @@ async function main() {
         });
     });
 
-    httpserver.listen(5000);
+    httpserver.listen(config["port"]);
 }
 
 main();
