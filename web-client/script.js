@@ -21,8 +21,23 @@ function render() {
         "channels": Object.keys(data["channels"])
     });
 
+    fix_images();
+
     const messages = document.getElementById("messages");
     messages.scrollTop = messages.scrollHeight;
+}
+
+function fix_images() {
+    const a_tags = document.getElementById("messages").getElementsByTagName("a");
+    for (const a of a_tags) {
+        var image = new Image();
+        image.onload = function() {
+            if (this.width > 0) {
+                a.outerHTML = nunjucks.render("image.html", { "url": a.href });
+            }
+        }
+        image.src = a.href;
+    }
 }
 
 window.send = () => {

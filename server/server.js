@@ -24,7 +24,12 @@ async function main() {
         socket.on(event_name, async (data) => {
             console.log("[" + event_name + "] [" + socket.id + "]");
             if (auth_unrequired.includes(event_name) || socket.id in connected_users) {
-                await func(data);
+                try {
+                    await func(data);
+                } catch (e) {
+                    console.log("[" + event_name + "] ["
+                        + socket.id + "] " + "error: " + e);
+                }
             } else {
                 console.log("[" + event_name + "] ["
                     + socket.id + "] " + "error: unauthorized");
@@ -43,7 +48,16 @@ async function main() {
                 },
                 body: JSON.stringify(token)
             });
-            const user_data = await response.json();
+
+            const text = await response.text();
+            let user_data;
+            try {
+                user_data = JSON.parse(text);
+            } catch (e) {
+                console.log("error when parsing response as json: " + e + "\n" + text);
+                return;
+            }
+
             const user_id = user_data["user_id"]
             connected_users[socket.id] = user_id;
             if (!(user_id in data["users"])) {
