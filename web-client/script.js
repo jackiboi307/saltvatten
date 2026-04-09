@@ -23,8 +23,8 @@ function render() {
 
     fix_images();
 
-    const messages = document.getElementById("messages");
-    messages.scrollTop = messages.scrollHeight;
+    var messages = document.getElementsByClassName("message")
+    messages[messages.length - 1].scrollIntoView(false);
 }
 
 function fix_images() {
