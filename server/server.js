@@ -98,7 +98,7 @@ async function main() {
             const embedPat = /(?:\s|^)(img|video|audio):(\S+)(?:\s|$)/gm;
             let embeds = [];
             for (const embed of content.matchAll(embedPat)) {
-                content = content.replace(embed, " ");
+                content = content.replace(embed[0], " ");
                 embeds.push({
                     "type": embed[1],
                     "url": embed[2]
