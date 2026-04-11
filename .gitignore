@@ -1,5 +1,6 @@
 /web-client/__pycache__
 /web-client/modules
+/web-client/templates/index.html
 /server/node_modules
 /server/package-lock.json
 /server/data.json
