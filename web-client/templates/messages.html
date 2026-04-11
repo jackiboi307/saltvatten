@@ -10,6 +10,8 @@
                         <div class="img-box">
                             <img src="{{ embed.url }}">
                         </div>
+                    {% elif embed.type == "audio" %}
+                        <audio controls src="{{ embed.url }}">
                     {% endif %}
                 {% endfor %}
             </div>

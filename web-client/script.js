@@ -4,6 +4,7 @@ import "/modules/js.cookie.js";
 
 var params = new URLSearchParams(document.location.search);
 var data = {};
+var socket;
 
 nunjucks.configure('templates', { autoescape: true });
 
@@ -78,7 +79,7 @@ if (address === null) {
         document.location = "https://kattmys.se/login?redirect=" + document.location;
     }
 
-    const socket = io(address);
+    socket = io(address);
 
     var first = true;
     socket.on("data", (new_data) => {
