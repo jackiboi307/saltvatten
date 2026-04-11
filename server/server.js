@@ -95,7 +95,7 @@ async function main() {
             const channel = message["channel"];
             let content = message["content"];
 
-            const embedPat = "(?:\\s|^)(img|video|audio):(\\S+)(?:\\s|$)"
+            const embedPat = /(?:\s|^)(img|video|audio):(\S+)(?:\s|$)/gm;
             let embeds = [];
             for (const embed of content.matchAll(embedPat)) {
                 embeds.push({
@@ -103,6 +103,8 @@ async function main() {
                     "url": embed[2]
                 });
             }
+
+            content = content.replaceAll(embedPat, " ");
 
             var message = {
                 "content": content,
