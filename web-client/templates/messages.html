@@ -1,7 +1,18 @@
 {% for message in messages %}
-<div class="message">
-    <span class="username">{{ users[message.user_id].username }}</span>
-    <span class="separator">&gt;</span>
-    <span class="content">{{ message.content | urlize | safe }}</span>
-</div>
+    <div class="message">
+        <span class="username">{{ users[message.user_id].username }}</span>
+        <span class="separator">&gt;</span>
+        <span class="content">{{ message.content | urlize | safe }}</span>
+        {% if message.embeds | length != 0 %}
+            <div class="embeds">
+                {% for embed in message.embeds %}
+                    {% if embed.type == "img" %}
+                        <div class="img-box">
+                            <img src="{{ embed.url }}">
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
 {% endfor %}

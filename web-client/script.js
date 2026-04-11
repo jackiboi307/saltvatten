@@ -9,42 +9,38 @@ var data = {};
 nunjucks.configure('templates', { autoescape: true });
 
 function render() {
-    function render_id(id, template, context) {
+    function renderId(id, template, context) {
         document.getElementById(id).innerHTML = nunjucks.render(template, context);
     }
 
-    render_id("messages", "messages.html", {
+    renderId("messages", "messages.html", {
         "messages": data["channels"][params.get("channel")]["messages"],
         "users": data["users"]
     });
-    render_id("channels", "channels.html", {
+    renderId("channels", "channels.html", {
         "channels": Object.keys(data["channels"])
     });
+}
 
-    fix_images();
-
-    var messages = document.getElementsByClassName("message")
+function scrollToBottom() {
+    var messages = document.getElementsByClassName("message");
     messages[messages.length - 1].scrollIntoView(false);
 }
 
-function fix_images() {
-    const a_tags = document.getElementById("messages").getElementsByTagName("a");
-    for (const a of a_tags) {
-        var image = new Image();
-        image.onload = function() {
-            if (this.width > 0) {
-                a.outerHTML = nunjucks.render("image.html", { "url": a.href });
-            }
-        }
-        image.src = a.href;
-    }
+function checkMaxScroll() {
+    var messages = document.getElementsByClassName("message");
+    return messages.scrollTop == messages.scrollTopMax;
 }
 
 window.send = () => {
     try {
         let form = document.getElementById("prompt").getElementsByTagName("form")[0];
         let content = form.getElementsByTagName("input")[0].value;
-        socket.emit("message", { "content": content, "channel": params.get("channel") });
+        if (content.trim().length !== 0) {
+            socket.emit("message", { "content": content, "channel": params.get("channel") });
+        } else {
+            scrollToBottom();
+        }
         form.reset();
     } catch (e) {
         console.log("error when sending message:", e);
@@ -53,21 +49,30 @@ window.send = () => {
     }
 };
 
-window.set_channel = (channel) => {
+window.setChannel = (channel) => {
     params.set("channel", channel);
     window.history.pushState(null, "", "?" + params.toString());
     render();
+    scrollToBottom();
 }
 
+var first = true;
 socket.on("data", (new_data) => {
     data = new_data;
     render();
+    if (first) {
+        first = false;
+        scrollToBottom();
+    }
 });
 
-socket.on("patch", (patch) => {
+socket.on("patch", (patchData) => {
     console.log("patch");
-    data = jsonpatch.apply_patch(data, patch);
+    data = jsonpatch.apply_patch(data, patchData["patch"]);
     render();
+    if (patchData["response"] || checkMaxScroll()) {
+        scrollToBottom();
+    }
 });
 
 socket.on("authorized", (_) => {
