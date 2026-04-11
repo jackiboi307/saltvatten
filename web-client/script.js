@@ -23,13 +23,13 @@ function render() {
 }
 
 function scrollToBottom() {
-    var messages = document.getElementsByClassName("message");
-    messages[messages.length - 1].scrollIntoView(false);
+    var messages = document.getElementById("messages");
+    messages.scrollTop = messages.scrollHeight;
 }
 
 function checkMaxScroll() {
-    var messages = document.getElementsByClassName("message");
-    return messages.scrollTop == messages.scrollTopMax;
+    var messages = document.getElementById("messages");
+    return messages.scrollHeight - messages.clientHeight - messages.scrollTop < 100;
 }
 
 window.send = () => {

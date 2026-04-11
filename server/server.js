@@ -80,7 +80,7 @@ async function main() {
 
             if (newUser) {
                 doPatch(socket, [{
-                    "op": "replace", "path": "/users/" + userId, "value": data["users"][userId]
+                    "op": "add", "path": "/users/" + userId, "value": data["users"][userId]
                 }]);
             }
 
